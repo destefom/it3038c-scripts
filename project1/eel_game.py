@@ -19,13 +19,13 @@ wn.tracer(0) # turns off screen updates
 
 # 2) Snake Head (the player themselves, what we control)
 # turtle is used to display the turtle itself, therefore the physical description must be coded
-head = turtle.Turtle()
-head.speed(0)
-head.shape("square")
-head.color("dark green")
-head.penup()
-head.goto(0,0)
-head.direction = "stop"
+eel = turtle.Turtle()
+eel.speed(0)
+eel.shape("square")
+eel.color("dark green")
+eel.penup()
+eel.goto(0,0)
+eel.direction = "stop"
 
 # Food/apple
 # what the player uses to grow
@@ -47,43 +47,41 @@ pen.color("midnight blue")
 pen.penup()
 pen.hideturtle() # hides the actual pen, allows so that only the text itself is visible
 pen.goto(0, 260)
-pen.write("Score: 0  High Score: 0", align="center", font=("Arial", 24, "normal"))
+pen.write("Score: 0   High Score: 0", align="center", font=("Arial", 22, "normal"))
 
 
 # Functions --> first part makes it so that the eel can't go backwards on itself and die that way. ie, if you're going up, you can't go back directly down.
 def go_up():
-    if head.direction != "down":
-        head.direction = "up"
+    if eel.direction != "down":
+        eel.direction = "up"
 
 def go_down():
-    if head.direction != "up":
-        head.direction = "down"
+    if eel.direction != "up":
+        eel.direction = "down"
 
 def go_left():
-    if head.direction != "right":
-        head.direction = "left"
+    if eel.direction != "right":
+        eel.direction = "left"
 
 def go_right():
-    if head.direction != "left":
-        head.direction = "right"
+    if eel.direction != "left":
+        eel.direction = "right"
 
 # this is what allows the eel to move
 def move():
-    if head.direction == "up":
-        y = head.ycor()
-        head.sety(y + 20)
+    if eel.direction == "up":
+        y = eel.ycor()
+        eel.sety(y + 20)
     
-    if head.direction == "down":
-        y = head.ycor()
-        head.sety(y - 20)
+    if eel.direction == "down":
+        eel.sety(eel.ycor() - 20)
 
-    if head.direction == "left":
-        x = head.xcor()
-        head.setx(x - 20)
+    if eel.direction == "left":
+        x = eel.xcor()
+        eel.setx(x - 20)
     
-    if head.direction == "right":
-    
-        head.setx(head.xcor() + 20)
+    if eel.direction == "right":
+        eel.setx(eel.xcor() + 20)
 
 # Keyboard bindings --> looks for inputs from the keyboard (w, a, s, d keys), the actual controls for the game.
 wn.listen()
@@ -97,10 +95,10 @@ while True:
     wn.update()
 
     # Check for border collision --> one of the possible ways to die which is hitting the border of the game window
-    if head.xcor()>290 or head.xcor()<-290 or head.ycor()>290 or head.ycor()<-290:
+    if eel.xcor()>290 or eel.xcor()<-290 or eel.ycor()>290 or eel.ycor()<-290:
         time.sleep(1)
-        head.goto(0,0)
-        head.direction = "stop"
+        eel.goto(0,0)
+        eel.direction = "stop"
 
         # Hide segments --> when the eel dies, all progress is lost, therefore the eel has to start growing again. This just hides the previous segments that were obtained from the previous round.
         for segment in segments:
@@ -117,15 +115,15 @@ while True:
 
         # Update the score display --> This is were the score can be updated each time the food is eaten by the eel
         pen.clear()
-        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Arial", 24, "normal"))
+        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Arial", 22, "normal"))
 
 
     # Check for collision with food --> what actually allows the eel to interact with the food so that it doesn't just stay in one place.
-    if head.distance(food) < 20:
+    if eel.distance(food) < 20:
         # Move the food to random spot --> after the eel touches the food, the food will move to a randomly generated point. necessary to have import random at the top in order to have randomly generated points
         x = random.randint(-290,290)
         y = random.randint(-290,290)
-        food.goto(x,y)
+        food.goto(random.randint(-290,290),random.randint(-290,290))
 
         # Add a segment --> the code that adds a new body segment to the eel after eating the food
         new_segment = turtle.Turtle()
@@ -145,7 +143,7 @@ while True:
             high_score = score
         
         pen.clear()
-        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Arial", 24, "normal"))
+        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Arial", 22, "normal"))
 
     # Move end segments first in reverse order (huh?)
     # I'm still a little confused about what this exactly does but basically it tells where to put the new body segment after the eel eats the food. essentially, the body will grow behind the head and follow after it and the body will appear to stay in its place instead of gliding across the screen.
@@ -156,18 +154,18 @@ while True:
 
     # Move segment 0 to where the head is --> the first segment obtained. 
     if len(segments) > 0:
-        x = head.xcor()
-        y = head.ycor()
+        x = eel.xcor()
+        y = eel.ycor()
         segments[0].goto(x,y)
 
     move()
 
     # Check for head collision w/ body segments --> another way the player can die, if the eel turns and hits its body
     for segment in segments:
-        if segment.distance(head) < 20:
+        if segment.distance(eel) < 20:
             time.sleep(1)
-            head.goto(0,0)
-            head.direction = "stop"
+            eel.goto(0,0)
+            eel.direction = "stop"
 
              # Hide segments
             for segment in segments:
@@ -186,5 +184,5 @@ while True:
 # One thing I noticed is that the game really only works if it stays in a minimized window.
 # When in a larger window, the eel will still die within the borders of the minimized window.
 # There might be someway to change it so that both the minimized and maximized windows can be playable.
-# I assume that would be controlled in the first step, where the margins of the game are made.
+# I assume that would be controlled in the first step, where the margins of the game are made and where the border collision control is
 wn.mainloop()
