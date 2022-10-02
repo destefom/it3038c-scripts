@@ -1,4 +1,11 @@
 # Snake in Python, originally made by TokyoEdtech on YouTube
+# The goal was to code "snake" in python version 3. When the script is running, it should open up a window like the image above.
+# That window is where the game will be played.
+# The snake, or eel in this case, will be stationary at the beginning and must be moved with the W, A, S, or D keys in order to start.
+# The player will control the green square and must collect the food, the maroon circles, in order to grow and obtain more points.
+# The player must avoid hitting the walls and the eel's body as doing so would result in the game ending.
+
+# based on: TokyoEdtech (2018) Python (Version 3) https://www.youtube.com/watch?v=BP7KMlbvtOo
 
 import turtle
 import time
